@@ -63,6 +63,7 @@ $(document).ready(function () {
     $('.credit-card').show(); 
     $('p:first').hide();              //hides first paypal paragraph
     $('p:last').hide();                 //hides second bitcoin paragraph
+    $("#payment > option:nth-child(1)").hide(); // hides payment method tab
 
     //credit card option first/hide other two
     $("#payment").on('change', function () {
@@ -73,21 +74,27 @@ $(document).ready(function () {
 
         }
         else {
-            $('.credit-card').hide();
+           $('.credit-card').hide();
 
         }
         if ($(this).val() === 'paypal') {    //when paypal is selected shows the associated paragraph
 
+       $('div p:eq(1)').show();
+        $('#credit-card').hide();
+         $('div p:eq(2)').hide();
 
-            $('p:first').show();
+            //$('.credit-card').hide();
+           // $('p:first').show();
+           //$('p:last').hide();
         }
         else {
             $('p:first').hide();      //hides parapragh if option deselected
 
-        }
+        } 
 
         if ($(this).val() === 'bitcoin') {    //when  bitcoin is selected show associated paragraph
             $('p:last').show();
+            $('div p:eq(1)').hide(); 
         }
         else {
 
@@ -202,8 +209,8 @@ $(document).ready(function () {
     //variables to use for validation
     
     var regexCC = /\b\d{13,16}\b/;  //regex for cc
-    var zipRegex = /^\d{1,5}$/;     //regex for zip
-    // var CVVRegex = /^\d{3}$/;    
+    var zipRegex =   /^\d{5}(?:[-\s]\d{4})?$/;   //regex for zip
+    var CVVRegex = /^\d{3}$/;   
     var regExAdress = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;   //regex for email
     //var validEmail = regEx.test(email);
     errorMsg ="";
@@ -212,59 +219,62 @@ $(document).ready(function () {
     $('#error-message').hide();          //hides error messages to start 
     
     $('form').submit(function (e) {                             //allowing us to submit form once its completed
-        e.preventDefault(); 
+       // e.preventDefault(); 
     
         if ($('#name').val() === "" ) {                         //name field cant be blank
-            errorMsg= "Please enter your name.";                //if blank returns error messages
+            e.preventDefault(); 
+            errorMsg= "<h1>ERROR!<h1>Please enter your name.";                //if blank returns error messages
             $('#name').addClass('error');
-            $('#name').focus();                                 //focuses back to name 
+                                            //focuses back to name 
+            $('#name').css('border-color', 'red').focus();
             
-            
-        }
-         else if ( !regExAdress.test($('#mail').val()) ) {        //tests email against regex for validity
-
-            errorMsg="Enter a valid email.";                        //returns error message if not valid
-            $('#mail').focus();                                     //focuses back to email
+        } else if ( !regExAdress.test($('#mail').val()) ) {        //tests email against regex for validity
+            e.preventDefault(); 
+            errorMsg="<h1>ERROR!</h1>Enter a valid email.";                        //returns error message if not valid
+            $('#mail').css('border-color', 'red').focus();                                     //focuses back to email
             $('#mail').addClass('error');                   
             
-        }
-        
-        else if ($(".activities > label > input:checked").length === 0) {    //makes sure at least one activity is checked
+        } else if ($(".activities > label > input:checked").length === 0) {    //makes sure at least one activity is checked
+            e.preventDefault(); 
+            errorMsg="<h1>ERROR!</h1>Please check at least one acivity.";
             
-            errorMsg="Please check at least one acivity.";
-            
-            $('.activities').focus();
+            $('.activities').css('border-color', 'red').focus();
             $(".activities > label > input:checked").addClass('error');
         
         } else if ( $("#payment").val() === "select_method" )  {            //  makes sure they select a payment method
-            errorMsg="Please select a payment method.";
+            e.preventDefault(); 
+            errorMsg="<h1>ERROR!</h1>Please select a payment method.";
             
-         $('#payment').focus();
+         $('#payment').css('border-color', 'red').focus();
         
-        } else if ( $("#payment").val() === "credit card" && !regexCC.test($("#cc-num").val()) )  // checks if its a credit card and matches regex for validity
-        {
+        } else if ( $("#payment").val() === "credit card" && !regexCC.test($("#cc-num").val()) ) { // checks if its a credit card and matches regex for validity
+          e.preventDefault(); 
+        
             $("#cc-num").addClass('error');
-            errorMsg="Please enter a valid credit card number.";         
-            $('#cc-num').focus();
+            errorMsg="<h1>ERROR!</h1>Please enter a valid credit card number.";         
+            $('#cc-num').css('border-color', 'red').focus();
         
-        } else if ( $("#payment").val() === "credit card" && !zipRegex.test($("#zip").val()))  //checks zip againt regex for validity
-        {   $("#zip").addClass('error')
-            errorMsg="Please enter a valid zip code.";
-            
+        } else if ( $("#payment").val() === "credit card" && !zipRegex.test($("#zip").val())) { //checks zip againt regex for validity
+             e.preventDefault(); 
+           $("#zip").addClass('error')
+            errorMsg="<h1>ERROR!</h1>Please enter a valid zip code.";
+            $("#zip").css('border-color', 'red').focus()
         
-        } else if ( $("#payment").val() === "credit card" && $("#cvv").val().length < 3)  {   //makes sure the credit card cvv has the right amount of digits 
-            errorMsg="CVV MUST BE THREE NUMBERS."; 
+        } else if ( $("#payment").val() === "credit card" && !CVVRegex.test($("#cvv").val())) {   //makes sure the credit card cvv has the right amount of digits 
+            e.preventDefault(); 
+            errorMsg="<h1>ERROR!</h1>CVV MUST BE THREE NUMBERS."; 
+            $("#cvv").css('border-color', 'red').focus()
             $("#cvv").addClass('error');
             
-        } else
-        {
+        } else {
+        
             errorMsg="You're all set! Thank you.";
             
-
-        }
+         }
         
         document.getElementById('error-message').innerHTML = errorMsg; //changing html content of Id ('error-message') to errorMsg and appends that text  
-        $('#error-message').show();      
+        $('#error-message').css('color', 'red').show();
+           
         
     });
 });
