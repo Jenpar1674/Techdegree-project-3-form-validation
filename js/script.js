@@ -273,12 +273,12 @@ $(document).ready(function () {
             $('#zip').css('border-color', 'black');
         } else {
         
-            errorMsg="<h1>Awesome!</h1>You're all set! Thank you.";
-            //alert("Success!");
+            errorMsg ="<h1>Awesome!</h1>You're all set! Thank you.";
+            alert("Success! You're all set! Thank you.");
          }
         
         document.getElementById('error-message').innerHTML = errorMsg; //changing html content of Id ('error-message') to errorMsg and appends that text  
-        $('#error-message').css('color', 'red').show();
+        $('#error-message').show();
            
         
     });
