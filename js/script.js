@@ -88,17 +88,17 @@ $(document).ready(function () {
            //$('p:last').hide();
         }
         else {
-            $('p:first').hide();      //hides parapragh if option deselected
+            $('div p:eq(1)').hide();      //hides parapragh if option deselected
 
         } 
 
         if ($(this).val() === 'bitcoin') {    //when  bitcoin is selected show associated paragraph
-            $('p:last').show();
+            $('div p:eq(2)').show();
             $('div p:eq(1)').hide(); 
         }
         else {
 
-            $('p:last').hide();             //hide paragraph if bitcoin deselected
+            $('div p:eq(2)').hide();             //hide paragraph if bitcoin deselected
         }
     })
 
@@ -233,19 +233,22 @@ $(document).ready(function () {
             errorMsg="<h1>ERROR!</h1>Enter a valid email.";                        //returns error message if not valid
             $('#mail').css('border-color', 'red').focus();                                     //focuses back to email
             $('#mail').addClass('error');                   
-            
+            $('#name').css('border-color', 'black');
+        
         } else if ($(".activities > label > input:checked").length === 0) {    //makes sure at least one activity is checked
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>Please check at least one acivity.";
             
             $('.activities').css('border-color', 'red').focus();
             $(".activities > label > input:checked").addClass('error');
+            $('#mail').css('border-color', 'black');
         
         } else if ( $("#payment").val() === "select_method" )  {            //  makes sure they select a payment method
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>Please select a payment method.";
             
          $('#payment').css('border-color', 'red').focus();
+         $('activities').css('border-color', 'black');
         
         } else if ( $("#payment").val() === "credit card" && !regexCC.test($("#cc-num").val()) ) { // checks if its a credit card and matches regex for validity
           e.preventDefault(); 
@@ -253,23 +256,25 @@ $(document).ready(function () {
             $("#cc-num").addClass('error');
             errorMsg="<h1>ERROR!</h1>Please enter a valid credit card number.";         
             $('#cc-num').css('border-color', 'red').focus();
-        
+            $('#payment').css('border-color', 'black');
+       
         } else if ( $("#payment").val() === "credit card" && !zipRegex.test($("#zip").val())) { //checks zip againt regex for validity
              e.preventDefault(); 
            $("#zip").addClass('error')
             errorMsg="<h1>ERROR!</h1>Please enter a valid zip code.";
             $("#zip").css('border-color', 'red').focus()
-        
+            $('#cc-num').css('border-color', 'black');
+       
         } else if ( $("#payment").val() === "credit card" && !CVVRegex.test($("#cvv").val())) {   //makes sure the credit card cvv has the right amount of digits 
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>CVV MUST BE THREE NUMBERS."; 
             $("#cvv").css('border-color', 'red').focus()
             $("#cvv").addClass('error');
-            
+            $('#zip').css('border-color', 'black');
         } else {
         
-            errorMsg="You're all set! Thank you.";
-            
+            errorMsg="<h1>Awesome!</h1>You're all set! Thank you.";
+            //alert("Success!");
          }
         
         document.getElementById('error-message').innerHTML = errorMsg; //changing html content of Id ('error-message') to errorMsg and appends that text  
