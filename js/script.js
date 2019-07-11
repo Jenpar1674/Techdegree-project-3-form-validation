@@ -78,7 +78,7 @@ $(document).ready(function () {
 
         }
         if ($(this).val() === 'paypal') {    //when paypal is selected shows the associated paragraph
-
+            
        $('div p:eq(1)').show();
         $('#credit-card').hide();
          $('div p:eq(2)').hide();
@@ -95,6 +95,7 @@ $(document).ready(function () {
         if ($(this).val() === 'bitcoin') {    //when  bitcoin is selected show associated paragraph
             $('div p:eq(2)').show();
             $('div p:eq(1)').hide(); 
+            $('.error').hide();
         }
         else {
 
@@ -214,45 +215,61 @@ $(document).ready(function () {
     var regExAdress = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;   //regex for email
     //var validEmail = regEx.test(email);
     errorMsg ="";
-    
+
+    // $('label[for="name"]').before('<label class="error" id="name-error"><font color="red">Please enter your name.</font></label>');
+    // $('label[for="mail"]').before('<label class="error" id="email-error"><font color="red">Please enter a valid email.</label>');
+    // $('.activities legend').before('<label class="error" id="activity-error"><font color="red">Please register for activities.</label>');
+    // $('#credit-card').before('<label class="error" id ="empty-error"><font color="red">Please enter a valid credit card number.</font></label>');
+    // $('#credit-card').before('<label class="error" id ="number-error"><font color="red">Please enter an valid credit card number.</font></label>');
+    // $('#credit-card').before('<label class="error" id ="zip-error"><font color="red">Please enter a valid 5-digit zip code number.</font></label>');
+    // $('#credit-card').before('<label class="error" id = "cvv-error"><font color="red">Please enter a 3-digit CVV number.</font></label>');
+    // $('.error').hide();
+        
+   
     $('form').prepend('<p id="error-message"></p>');     //adds error message to top of page when user needs to re enter info
     $('#error-message').hide();          //hides error messages to start 
     
     $('form').submit(function (e) {                             //allowing us to submit form once its completed
        // e.preventDefault(); 
     
-        if ($('#name').val() === "" ) {                         //name field cant be blank
+       /** */ if ($('#name').val() === "" ) {                         //name field cant be blank
             e.preventDefault(); 
             errorMsg= "<h1>ERROR!<h1>Please enter your name.";                //if blank returns error messages
-            $('#name').addClass('error');
+            //$('#name').addClass('error');
                                             //focuses back to name 
-            $('#name').css('border-color', 'red').focus();
+            $('#name').addClass('error').css('border-color', 'red').focus();
+            $('.error').show();
+            
             
         } else if ( !regExAdress.test($('#mail').val()) ) {        //tests email against regex for validity
+            
+            $('#name').addClass('error')
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>Enter a valid email.";                        //returns error message if not valid
             $('#mail').css('border-color', 'red').focus();                                     //focuses back to email
             $('#mail').addClass('error');                   
             $('#name').css('border-color', 'black');
-        
-        } else if ($(".activities > label > input:checked").length === 0) {    //makes sure at least one activity is checked
+            $('.error').show();
+        } 
+        else if ($(".activities > label > input:checked").length === 0) {    //makes sure at least one activity is checked
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>Please check at least one acivity.";
-            
+            $('.activities legend').before('<label class="error" id="activity-error"><font color="red">Please register for activities.</label>');
             $('.activities').css('border-color', 'red').focus();
             $(".activities > label > input:checked").addClass('error');
             $('#mail').css('border-color', 'black');
+            $('.error').show();
         
         } else if ( $("#payment").val() === "select_method" )  {            //  makes sure they select a payment method
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>Please select a payment method.";
-            
+            $('.error').show();
          $('#payment').css('border-color', 'red').focus();
          $('activities').css('border-color', 'black');
         
         } else if ( $("#payment").val() === "credit card" && !regexCC.test($("#cc-num").val()) ) { // checks if its a credit card and matches regex for validity
           e.preventDefault(); 
-        
+          $('.error').show();
             $("#cc-num").addClass('error');
             errorMsg="<h1>ERROR!</h1>Please enter a valid credit card number.";         
             $('#cc-num').css('border-color', 'red').focus();
@@ -264,22 +281,24 @@ $(document).ready(function () {
             errorMsg="<h1>ERROR!</h1>Please enter a valid zip code.";
             $("#zip").css('border-color', 'red').focus()
             $('#cc-num').css('border-color', 'black');
-       
+            $('.error').show();
         } else if ( $("#payment").val() === "credit card" && !CVVRegex.test($("#cvv").val())) {   //makes sure the credit card cvv has the right amount of digits 
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>CVV MUST BE THREE NUMBERS."; 
             $("#cvv").css('border-color', 'red').focus()
             $("#cvv").addClass('error');
             $('#zip').css('border-color', 'black');
+            $('.error').show();
         } else {
         
             errorMsg ="<h1>Awesome!</h1>You're all set! Thank you.";
-            alert("Success! You're all set! Thank you.");
+           // alert("Success! You're all set! Thank you.");
          }
         
         document.getElementById('error-message').innerHTML = errorMsg; //changing html content of Id ('error-message') to errorMsg and appends that text  
         $('#error-message').show();
-           
+       
+       
         
     });
 });
