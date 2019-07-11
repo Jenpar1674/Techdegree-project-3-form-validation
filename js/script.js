@@ -216,14 +216,8 @@ $(document).ready(function () {
     //var validEmail = regEx.test(email);
     errorMsg ="";
 
-    // $('label[for="name"]').before('<label class="error" id="name-error"><font color="red">Please enter your name.</font></label>');
-    // $('label[for="mail"]').before('<label class="error" id="email-error"><font color="red">Please enter a valid email.</label>');
-    // $('.activities legend').before('<label class="error" id="activity-error"><font color="red">Please register for activities.</label>');
-    // $('#credit-card').before('<label class="error" id ="empty-error"><font color="red">Please enter a valid credit card number.</font></label>');
-    // $('#credit-card').before('<label class="error" id ="number-error"><font color="red">Please enter an valid credit card number.</font></label>');
-    // $('#credit-card').before('<label class="error" id ="zip-error"><font color="red">Please enter a valid 5-digit zip code number.</font></label>');
-    // $('#credit-card').before('<label class="error" id = "cvv-error"><font color="red">Please enter a 3-digit CVV number.</font></label>');
-    // $('.error').hide();
+    
+    $('.error').hide();
         
    
     $('form').prepend('<p id="error-message"></p>');     //adds error message to top of page when user needs to re enter info
@@ -234,7 +228,7 @@ $(document).ready(function () {
     
        /** */ if ($('#name').val() === "" ) {                         //name field cant be blank
             e.preventDefault(); 
-            errorMsg= "<h1>ERROR!<h1>Please enter your name.";                //if blank returns error messages
+            errorMsg= "<h1>ERROR!<h1>PLease enter your name.";                //if blank returns error messages
             //$('#name').addClass('error');
                                             //focuses back to name 
             $('#name').addClass('error').css('border-color', 'red').focus();
@@ -275,6 +269,7 @@ $(document).ready(function () {
             $('#cc-num').css('border-color', 'red').focus();
             $('#payment').css('border-color', 'black');
        
+        
         } else if ( $("#payment").val() === "credit card" && !zipRegex.test($("#zip").val())) { //checks zip againt regex for validity
              e.preventDefault(); 
            $("#zip").addClass('error')
@@ -282,6 +277,7 @@ $(document).ready(function () {
             $("#zip").css('border-color', 'red').focus()
             $('#cc-num').css('border-color', 'black');
             $('.error').show();
+        
         } else if ( $("#payment").val() === "credit card" && !CVVRegex.test($("#cvv").val())) {   //makes sure the credit card cvv has the right amount of digits 
             e.preventDefault(); 
             errorMsg="<h1>ERROR!</h1>CVV MUST BE THREE NUMBERS."; 
@@ -289,15 +285,16 @@ $(document).ready(function () {
             $("#cvv").addClass('error');
             $('#zip').css('border-color', 'black');
             $('.error').show();
+       
         } else {
-        
+            $('.error').hide();
             errorMsg ="<h1>Awesome!</h1>You're all set! Thank you.";
-           // alert("Success! You're all set! Thank you.");
+           alert("Success! You're all set! Thank you.");
          }
         
         document.getElementById('error-message').innerHTML = errorMsg; //changing html content of Id ('error-message') to errorMsg and appends that text  
         $('#error-message').show();
-       
+      $('.error').show();
        
         
     });
